@@ -75,7 +75,7 @@ Vagrant.configure(2) do |config|
     sudo apt-get install strace tcpdump -y
     sudo apt-get install libssl-dev zlib1g-dev libcurl3-dev libxslt-dev -y
     sudo apt-get install software-properties-common python-software-properties libcairo2-dev libav-tools nfs-common portmap -y
-    sudo apt-get install -y make g++ curl vim 
+    sudo apt-get install -y make g++ curl vim python
 
     sudo apt-get install git -y
 
