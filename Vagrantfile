@@ -95,16 +95,16 @@ Vagrant.configure(2) do |config|
     sudo npm install -g yo --unsafe-perm
     yo --version
 
-    npm install -g bower
+    sudo npm install -g bower
     #Depending on your preferences, install either Grunt (recommended) with 
-    npm install -g grunt-cli
+    sudo npm install -g grunt-cli
     # or Gulp.js with 
     # npm install -g gulp.
     # Install JHipster: 
-    npm install -g generator-jhipster
+    sudo npm install -g generator-jhipster
 
     # make sure java 1.7 installed
-    wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/equip_java7_64.sh && bash equip_java7_64.sh
+    sudo wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/equip_java7_64.sh && bash equip_java7_64.sh
     java -version
     # # set java defaultsJAVA_HOME and PATH
     # sudo apt-get install -y oracle-java7-set-default
