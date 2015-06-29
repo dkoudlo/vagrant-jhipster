@@ -22,7 +22,7 @@ Vagrant.configure(2) do |config|
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
-  # config.vm.network "forwarded_port", guest: 80, host: 8080
+  config.vm.network "forwarded_port", guest: 80, host: 8080
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -37,14 +37,15 @@ Vagrant.configure(2) do |config|
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-  # config.vm.synced_folder "../data", "/vagrant_data/"
+  # Map the app source to vagrant home directory
+  config.vm.synced_folder "./app", "/home/vagrant/app"
 
   config.vm.post_up_message = "\n\n\n\n\n\n\n" + 
                               "This VM has these installed:"+
                               # "\n- apache2" +
                               "\n- git" +
                               "\n- Node.js + npm" + 
-                              "\n- Yeoman, Grunt, Bower and JHipster yo generator" + 
+                              "\n- Yeoman, Grunt, Bower and JHipster the yo generator" + 
                               "\n- Java 7 with JAVA_HOME and PATH set.\n"
 
   # Provider-specific configuration so you can fine-tune various
@@ -57,7 +58,7 @@ Vagrant.configure(2) do |config|
   #
   # Customize the amount of memory on the VM:
     vb.memory = "1024"
-    vb.name = "metrix-box"
+    vb.name = "jhipster-box"
   end
   #
   # View the documentation for the provider you are using for more
@@ -76,6 +77,9 @@ Vagrant.configure(2) do |config|
   
 
   config.vm.provision "shell", inline: <<-SHELL
+    # make the directory for our app
+    sudo mkdir ~/app
+
     sudo apt-get update -y
 
     # install basic tools
@@ -123,7 +127,7 @@ Vagrant.configure(2) do |config|
 
     # make sure java 1.7 installed
   
-    # sudo wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/equip_java7_64.sh && bash equip_java7_64.sh
+    sudo wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/equip_java7_64.sh && bash equip_java7_64.sh
     java -version
     # # set java defaultsJAVA_HOME and PATH
     # sudo apt-get install -y oracle-java7-set-default
