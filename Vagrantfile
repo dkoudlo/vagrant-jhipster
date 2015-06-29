@@ -12,7 +12,7 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "ubuntu/trusty64"
+  config.vm.box = "ubuntu/precise64"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -37,7 +37,15 @@ Vagrant.configure(2) do |config|
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-  # config.vm.synced_folder "../data", "/vagrant_data"
+  # config.vm.synced_folder "../data", "/vagrant_data/"
+
+  config.vm.post_up_message = "\n\n\n\n\n\n\n" + 
+                              "This VM has these installed:"+
+                              # "\n- apache2" +
+                              "\n- git" +
+                              "\n- Node.js + npm" + 
+                              "\n- Yeoman, Grunt, Bower and JHipster yo generator" + 
+                              "\n- Java 7 with JAVA_HOME and PATH set.\n"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -75,13 +83,15 @@ Vagrant.configure(2) do |config|
     sudo apt-get install strace tcpdump -y
     sudo apt-get install libssl-dev zlib1g-dev libcurl3-dev libxslt-dev -y
     sudo apt-get install software-properties-common python-software-properties libcairo2-dev libav-tools nfs-common portmap -y
-    sudo apt-get install -y make g++ curl vim python
+    sudo apt-get install -y make g++ curl locate
 
     sudo apt-get install git -y
 
     curl -sL https://deb.nodesource.com/setup | sudo bash -
     sudo apt-get install -y nodejs
-    sudo apt-get install -y build-essential
+
+    sudo apt-get update -y
+    # sudo apt-get install -y build-essential
     # Upgrade to latest npm
     sudo npm install -g npm@latest
 
@@ -92,24 +102,34 @@ Vagrant.configure(2) do |config|
     node -v
 
     # install yeoman
-    sudo npm install -g yo --unsafe-perm
-    yo --version
+    sudo npm cache clean -f
+    sudo npm install -g yo
 
+    # Install Bower
+    sudo npm cache clean -f
     sudo npm install -g bower
+    bower -version
+    
     #Depending on your preferences, install either Grunt (recommended) with 
+    sudo npm cache clean -f
     sudo npm install -g grunt-cli
+    sudo npm install grunt
+    grunt -version
     # or Gulp.js with 
     # npm install -g gulp.
     # Install JHipster: 
+    sudo npm cache clean -f
     sudo npm install -g generator-jhipster
 
     # make sure java 1.7 installed
-    sudo wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/equip_java7_64.sh && bash equip_java7_64.sh
+  
+    # sudo wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/equip_java7_64.sh && bash equip_java7_64.sh
     java -version
     # # set java defaultsJAVA_HOME and PATH
     # sudo apt-get install -y oracle-java7-set-default
     # echo $JAVA_HOME
-    # echo $PATH
+    # echo $
 
+    sudo updatedb
   SHELL
 end
