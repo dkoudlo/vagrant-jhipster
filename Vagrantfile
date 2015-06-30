@@ -70,6 +70,9 @@ Vagrant.configure(2) do |config|
   # Uncommment this to see if theres are problems with VirtualBox
     # vb.gui = true
   #
+  # tell npm which system we are running
+    vb.customize ["setextradata", :id, "VBoxInternal2/home/vagrant/app", "1"]
+
   # Customize the amount of memory on the VM:
     vb.memory = "1024"
     vb.cpus = 2
@@ -97,6 +100,11 @@ Vagrant.configure(2) do |config|
         sudo mkdir /home/vagrant/app
     fi
 
+    # npm no binary links for vagrant
+    # echo "alias npm='npm --no-bin-links'" >> /home/vagrant/.bashrc
+    # set the node path
+    echo "export NODE_PATH=$NODE_PATH:/usr/local/lib/node_modules" >> ~/.bashrc && source ~/.bashrc
+
     sudo apt-get update -y
 
     # install basic tools
@@ -104,9 +112,9 @@ Vagrant.configure(2) do |config|
     sudo apt-get install strace tcpdump -y
     sudo apt-get install libssl-dev zlib1g-dev libcurl3-dev libxslt-dev -y
     sudo apt-get install software-properties-common python-software-properties libcairo2-dev libav-tools nfs-common portmap -y
-    sudo apt-get install -y make g++ curl locate
+    sudo apt-get install -y make g++ curl locate git
 
-    sudo apt-get install git -y
+    # sudo apt-get install git -y
 
     curl -sL https://deb.nodesource.com/setup | sudo bash -
     sudo apt-get install -y nodejs
@@ -114,14 +122,15 @@ Vagrant.configure(2) do |config|
     sudo apt-get update -y
     # sudo apt-get install -y build-essential
     # Upgrade to latest npm
-    npm install -g npm@latest
-    echo NPM version
-    npm --version
+    # npm install -g npm@2.8.0
+    # echo NPM version
+    # npm --version
 
     # Upgrade Nodejs to latest with npm
     npm cache clean -f
     npm install -g n
     sudo n stable
+    export NODE_PATH=$NODE_PATH:/usr/local/lib/node_modules
     echo NodeJS version
     node -v
 
@@ -149,7 +158,7 @@ Vagrant.configure(2) do |config|
 
     # the install files for grunt do not have right permissions
     # lets fix them
-    sudo chown -R vagrant:vagrant /usr/lib/node_modules
+    # sudo chown -R vagrant:vagrant /usr/lib/node_modules
     # sudo chown -R vagrant:vagrant /home/vagrant/.npm
 
     # make sure java 1.7 installed
