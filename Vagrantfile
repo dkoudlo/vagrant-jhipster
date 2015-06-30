@@ -43,7 +43,11 @@ Vagrant.configure(2) do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   # Map the app source to vagrant home directory
-  config.vm.synced_folder "app/", "/home/vagrant/app/", owner: "vagrant", group: "vagrant"
+  # config.vm.synced_folder "app/", "/home/vagrant/app/", owner: "vagrant", group: "vagrant"
+
+  config.vm.synced_folder "app", "/home/vagrant/app/", type: "rsync",
+    rsync__exclude: ".git/"
+
 
   # disable vagrant share
   config.vm.synced_folder ".", "/vagrant", disabled: true
@@ -71,7 +75,7 @@ Vagrant.configure(2) do |config|
     # vb.gui = true
   #
   # tell npm which system we are running
-    vb.customize ["setextradata", :id, "VBoxInternal2/home/vagrant/app", "1"]
+    # vb.customize ["setextradata", :id, "VBoxInternal2/home/vagrant/app", "1"]
 
   # Customize the amount of memory on the VM:
     vb.memory = "1024"
@@ -130,7 +134,7 @@ Vagrant.configure(2) do |config|
     npm cache clean -f
     npm install -g n
     sudo n stable
-    export NODE_PATH=$NODE_PATH:/usr/local/lib/node_modules
+    # export NODE_PATH=$NODE_PATH:/usr/local/lib/node_modules
     echo NodeJS version
     node -v
 
