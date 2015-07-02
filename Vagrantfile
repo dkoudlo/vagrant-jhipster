@@ -12,8 +12,8 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  # ubuntu/precise64 hashicorp atlas cloud image
-  config.vm.box = "ubuntu/precise64"
+  # ubuntu/precise64 hashicorp atlas cloud image (ubuntu/trusty64 (14.04 LTS))
+  config.vm.box = "ubuntu/trusty64"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -45,15 +45,15 @@ Vagrant.configure(2) do |config|
   # Map the app source to vagrant home directory
   # config.vm.synced_folder "app/", "/home/vagrant/app/", owner: "vagrant", group: "vagrant"
 
-  config.vm.synced_folder "app", "/home/vagrant/app/", type: "rsync",
-    rsync__exclude: ".git/"
+  # config.vm.synced_folder "app", "/home/vagrant/app/", type: "rsync",
+  #   rsync__exclude: ".git/"
 
 
   # disable vagrant share
-  config.vm.synced_folder ".", "/vagrant", disabled: true
+  # config.vm.synced_folder ".", "/vagrant", disabled: true
 
   config.vm.post_up_message = "\n\n\n\n===========================================================" + 
-                              "\n\nThis VM has these installed:"+
+                              "\n\nThis VM has these tools installed:"+
                               # "\n- apache2" +
                               "\n- git" +
                               "\n- Node.js + npm" + 
@@ -75,8 +75,7 @@ Vagrant.configure(2) do |config|
     # vb.gui = true
   #
   # tell npm which system we are running
-    # vb.customize ["setextradata", :id, "VBoxInternal2/home/vagrant/app", "1"]
-
+    vb.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/home/vagrant/app", "1"]
   # Customize the amount of memory on the VM:
     vb.memory = "1024"
     vb.cpus = 2
@@ -107,7 +106,7 @@ Vagrant.configure(2) do |config|
     # npm no binary links for vagrant
     # echo "alias npm='npm --no-bin-links'" >> /home/vagrant/.bashrc
     # set the node path
-    echo "export NODE_PATH=$NODE_PATH:/usr/local/lib/node_modules" >> ~/.bashrc && source ~/.bashrc
+    # echo "export NODE_PATH=/usr/local/lib/node_modules:$NODE_PATH" >> ~/.bashrc && source ~/.bashrc
 
     sudo apt-get update -y
 
@@ -120,36 +119,43 @@ Vagrant.configure(2) do |config|
 
     # sudo apt-get install git -y
 
-    curl -sL https://deb.nodesource.com/setup | sudo bash -
+    # curl -sL https://deb.nodesource.com/setup | sudo bash -
+    curl --silent --location https://deb.nodesource.com/setup_0.12 | sudo bash -
     sudo apt-get install -y nodejs
 
     sudo apt-get update -y
     # sudo apt-get install -y build-essential
     # Upgrade to latest npm
-    # npm install -g npm@2.8.0
+    # npm install -g npm@latest
     # echo NPM version
     # npm --version
 
     # Upgrade Nodejs to latest with npm
-    npm cache clean -f
-    npm install -g n
-    sudo n stable
-    # export NODE_PATH=$NODE_PATH:/usr/local/lib/node_modules
+    # npm cache clean -f
+    # npm install -g n
+    # sudo n stable
+    # export NODE_PATH=/usr/local/lib/node_modules:$NODE_PATH
+    # associate nodejs symbolic link with node binary, otherwise yo would use nodejs from the /usr/bin folder
+    # sudo ln -s /usr/local/bin/node /usr/local/bin/nodejs
     echo NodeJS version
+    nodejs -v
+    echo Node version
     node -v
+    echo NPM version
+    npm -version
 
     # install yeoman
-    npm cache clean -f
+    # npm cache clean -f
     npm install -g yo
 
     # Install Bower
-    npm cache clean -f
+    # npm cache clean -f
     npm install -g bower
     echo Bower version
     bower -version
     
     #Depending on your preferences, install either Grunt (recommended) with 
-    npm cache clean -f
+    # npm cache clean -f
     npm install -g grunt
     npm install -g grunt-cli
     echo Grunt version
@@ -157,7 +163,7 @@ Vagrant.configure(2) do |config|
     # or Gulp.js with 
     # npm install -g gulp.
     # Install JHipster:
-    npm cache clean -f
+    # npm cache clean -f
     npm install -g generator-jhipster
 
     # the install files for grunt do not have right permissions
@@ -166,10 +172,10 @@ Vagrant.configure(2) do |config|
     # sudo chown -R vagrant:vagrant /home/vagrant/.npm
 
     # make sure java 1.7 installed
-    sudo wget --no-check-certificate https://github.com/dkoudlo/ubuntu-equip/raw/master/equip_java7_64.sh && bash equip_java7_64.sh
+###########    sudo wget --no-check-certificate https://github.com/dkoudlo/ubuntu-equip/raw/master/equip_java7_64.sh && bash equip_java7_64.sh
     # set java defaultsJAVA_HOME and PATH
     # sudo apt-get install -y oracle-java7-set-default
 
-    sudo updatedb
+    # sudo updatedb
   SHELL
 end
